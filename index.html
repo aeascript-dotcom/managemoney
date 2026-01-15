@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salaryman Life Simulator - The Ultimate Financial Reality Check</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- HEADER -->
+      <header class="header">
+        <div class="header-content">
+          <h1>💰 The Salaryman Life Simulator</h1>
+          <p class="subtitle">A brutal, mathematical look at your financial reality</p>
+          <p class="tagline">No sugar-coating. Just pure math and hard truths.</p>
+        </div>
+      </header>
+
+      <!-- MAIN DASHBOARD -->
+      <main class="dashboard">
+        <!-- ===== LEFT COLUMN: INPUTS ===== -->
+        <aside class="input-panel">
+          <div class="panel-header">
+            <h2>📝 Your Life Settings</h2>
+            <button id="resetBtn" class="btn-small btn-reset">Reset to Defaults</button>
+          </div>
+
+          <!-- SECTION 1: INCOME & TIME -->
+          <section class="input-section">
+            <h3>💼 Income & Work</h3>
+            <div class="input-group">
+              <label for="salary">Monthly Salary (¥)</label>
+              <input type="number" id="salary" min="0" step="10000" value="360000" />
+              <span class="hint">Base monthly income</span>
+            </div>
+            <div class="input-group">
+              <label for="workDays">Work Days per Month</label>
+              <input type="number" id="workDays" min="1" max="31" value="22" />
+              <span class="hint">Typically 20-22 days</span>
+            </div>
+            <div class="input-group">
+              <label for="workHours">Work Hours per Day</label>
+              <input type="number" id="workHours" min="1" max="24" step="0.5" value="8" />
+              <span class="hint">Official working hours</span>
+            </div>
+          </section>
+
+          <!-- SECTION 2: ASSETS & CASHFLOW -->
+          <section class="input-section">
+            <h3>💳 Cash & Expenses</h3>
+            <div class="input-group">
+              <label for="currentCash">Current Cash (¥)</label>
+              <input type="number" id="currentCash" min="0" step="10000" value="50000" />
+              <span class="hint">Money in hand right now</span>
+            </div>
+            <div class="input-group">
+              <label for="fixedCosts">Fixed Costs per Month (¥)</label>
+              <input type="number" id="fixedCosts" min="0" step="5000" value="100000" />
+              <span class="hint">Rent, utilities, subscriptions</span>
+            </div>
+            <div class="input-group">
+              <label for="dailyBurnAvg">Daily Essential Spending (¥)</label>
+              <input type="number" id="dailyBurnAvg" min="0" step="100" value="2000" />
+              <span class="hint">Food, transport, etc.</span>
+            </div>
+            <div class="input-group">
+              <label for="daysUntilPayday">Days Until Paycheck</label>
+              <input type="number" id="daysUntilPayday" min="0" max="31" value="10" />
+              <span class="hint">How long until salary arrives</span>
+            </div>
+          </section>
+
+          <!-- SECTION 3: DEBT TRAP -->
+          <section class="input-section">
+            <h3>🔗 Debt & Installments</h3>
+            <div class="input-group">
+              <label for="creditCardDebt">Credit Card Debt (¥)</label>
+              <input type="number" id="creditCardDebt" min="0" step="5000" value="0" />
+              <span class="hint">Outstanding balance</span>
+            </div>
+            <div class="input-group">
+              <label for="minPayRate">Minimum Payment Rate (%)</label>
+              <input type="number" id="minPayRate" min="0" max="100" step="0.5" value="10" />
+              <span class="hint">Percent of balance per month</span>
+            </div>
+
+            <!-- Installments Manager -->
+            <div class="installments-manager">
+              <h4>📦 Installment Loans</h4>
+              <div id="installmentsList" class="installments-list"></div>
+              <div class="installment-add">
+                <input type="text" id="installmentName" placeholder="Item (e.g., iPhone)" />
+                <input type="number" id="installmentMonthly" placeholder="Monthly (¥)" min="0" />
+                <input type="number" id="installmentMonths" placeholder="Months Left" min="1" />
+                <button id="addInstallmentBtn" class="btn-small">Add</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 4: SOCIAL & FACE -->
+          <section class="input-section">
+            <h3>👥 Social Obligations</h3>
+            <div class="input-group">
+              <label for="socialEventsPerMonth">Events per Month</label>
+              <input type="number" id="socialEventsPerMonth" min="0" max="20" step="0.5" value="2" />
+              <span class="hint">Weddings, dinners, parties</span>
+            </div>
+            <div class="input-group">
+              <label for="faceTaxPerEvent">Cost per Event (¥)</label>
+              <input type="number" id="faceTaxPerEvent" min="0" step="1000" value="8000" />
+              <span class="hint">Gift + outfit + transport</span>
+            </div>
+          </section>
+
+          <!-- SECTION 5: HEALTH & RISK -->
+          <section class="input-section">
+            <h3>❤️ Health & Insurance</h3>
+            <div class="input-group">
+              <label for="sleepHours">Average Sleep Hours</label>
+              <input type="number" id="sleepHours" min="0" max="24" step="0.5" value="6" />
+              <span class="hint">Hours per night</span>
+            </div>
+            <div class="input-group">
+              <label for="junkFoodMeals">Junk Food Meals per Week</label>
+              <input type="number" id="junkFoodMeals" min="0" max="21" value="3" />
+              <span class="hint">Fast food, convenience meals</span>
+            </div>
+            <div class="input-group">
+              <label for="insurancePremium">Insurance Premium (¥)</label>
+              <input type="number" id="insurancePremium" min="0" step="1000" value="5000" />
+              <span class="hint">Monthly insurance cost</span>
+            </div>
+            <div class="input-group">
+              <label for="insuranceCoverage">Coverage Percentage (%)</label>
+              <input type="number" id="insuranceCoverage" min="0" max="100" step="5" value="80" />
+              <span class="hint">Insurance pays this % of costs</span>
+            </div>
+          </section>
+
+          <!-- SECTION 6: PASSION & SANITY -->
+          <section class="input-section">
+            <h3>🎨 Passion Fund & Sanity</h3>
+            <div class="input-group">
+              <label for="passionFundBudget">Monthly Passion Budget (¥)</label>
+              <input type="number" id="passionFundBudget" min="0" step="1000" value="10000" />
+              <span class="hint">For hobbies, dreams, happiness</span>
+            </div>
+            <div class="input-group">
+              <label for="stressLevel">Current Stress Level (1-10)</label>
+              <input type="range" id="stressLevel" min="1" max="10" value="5" />
+              <span class="hint"><span id="stressValue">5</span>/10</span>
+            </div>
+          </section>
+
+          <!-- SECTION 7: GOALS -->
+          <section class="input-section">
+            <h3>🎯 Savings Target</h3>
+            <div class="input-group">
+              <label for="savingsTarget">Target Monthly Savings (¥)</label>
+              <input type="number" id="savingsTarget" min="0" step="5000" value="100000" />
+              <span class="hint">How much you want to save</span>
+            </div>
+          </section>
+        </aside>
+
+        <!-- ===== RIGHT COLUMN: OUTPUTS ===== -->
+        <section class="output-panel">
+          <!-- TAB NAVIGATION -->
+          <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="modules">Detailed Breakdown</button>
+            <button class="tab-btn" data-tab="impatience">Impatience Calculator</button>
+            <button class="tab-btn" data-tab="accidents">Accident Simulator</button>
+          </div>
+
+          <!-- TAB 1: MAIN DASHBOARD -->
+          <div id="dashboard" class="tab-content active">
+            <!-- SURVIVAL METER -->
+            <div class="card card-hero">
+              <h3>🚨 Your Survival Meter</h3>
+              <div class="survival-container">
+                <div class="metric">
+                  <span class="label">Survival Index</span>
+                  <div class="value-large">
+                    <span id="survivalIndex" class="value">-</span>
+                    <span id="survivalStatus" class="status-badge">-</span>
+                  </div>
+                  <p class="explanation" id="survivalExplanation">-</p>
+                </div>
+
+                <div class="progress-section">
+                  <div class="metric-row">
+                    <span>Available Daily Budget:</span>
+                    <span class="highlight">¥<span id="dailyBudgetReal">-</span></span>
+                  </div>
+                  <div class="metric-row">
+                    <span>Daily Essential Burn:</span>
+                    <span class="highlight">¥<span id="dailyBurnDisplay">-</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TIME VALUE ENGINE -->
+            <div class="card">
+              <h3>⏱️ Module 1: Time Value Engine</h3>
+              <div class="metric-grid">
+                <div class="metric">
+                  <span class="label">Hourly Wage</span>
+                  <span class="value">¥<span id="hourlyWage">-</span>/hr</span>
+                </div>
+                <div class="metric">
+                  <span class="label">Days of Work per ¥100k</span>
+                  <span class="value"><span id="daysOfWork">-</span> days</span>
+                </div>
+              </div>
+              <p class="note">This is how much work an item costs you in life hours.</p>
+            </div>
+
+            <!-- DEBT SPIRAL -->
+            <div class="card">
+              <h3>🔗 Module 2: The Debt Spiral</h3>
+              <div class="debt-breakdown">
+                <div class="metric-row">
+                  <span>Credit Card Debt:</span>
+                  <span class="highlight">¥<span id="debtCardTotal">-</span></span>
+                </div>
+                <div class="metric-row">
+                  <span>Monthly Min Payment:</span>
+                  <span class="highlight">¥<span id="debtCardPayment">-</span></span>
+                </div>
+                <div class="metric-row">
+                  <span>Installment Loans:</span>
+                  <span class="highlight">¥<span id="installmentTotal">-</span>/mo</span>
+                </div>
+                <div class="metric-row">
+                  <span>Total Debt Commitment:</span>
+                  <span class="value-large">¥<span id="monthlyDebtCommitment">-</span></span>
+                </div>
+                <div class="metric-row danger">
+                  <span>🚨 Debt Freedom in:</span>
+                  <span class="value-large"><span id="debtFreedomMonths">-</span> months</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SOCIAL TAX -->
+            <div class="card">
+              <h3>👥 Module 3: Social Tax (Unavoidable Leaks)</h3>
+              <div class="metric-grid">
+                <div class="metric">
+                  <span class="label">Monthly Social Cost</span>
+                  <span class="value">¥<span id="monthlySocialCost">-</span></span>
+                </div>
+                <div class="metric">
+                  <span class="label">Annual Social Waste</span>
+                  <span class="value">¥<span id="annualSocialCost">-</span></span>
+                </div>
+              </div>
+              <p class="note">The cost of saving face in society.</p>
+            </div>
+
+            <!-- HEALTH STATUS -->
+            <div class="card">
+              <h3>❤️ Module 4: Health Depreciation</h3>
+              <div class="health-status">
+                <div class="metric">
+                  <span class="label">Health Status</span>
+                  <span class="value" id="healthStatus">-</span>
+                </div>
+                <div class="metric">
+                  <span class="label">Risk Multiplier</span>
+                  <span class="value" id="healthPenalty">-</span>
+                </div>
+              </div>
+              <p class="note" id="healthNote">Your sleep and diet affect your accident risk.</p>
+            </div>
+
+            <!-- NET INCOME ANALYSIS -->
+            <div class="card card-important">
+              <h3>💹 Monthly Net Income Breakdown</h3>
+              <div class="flow-chart">
+                <div class="flow-item positive">
+                  <span class="label">Gross Salary</span>
+                  <span class="amount">¥<span id="flowSalary">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item negative">
+                  <span class="label">Fixed Costs (Rent, Bills)</span>
+                  <span class="amount">-¥<span id="flowFixed">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item negative">
+                  <span class="label">Debt Commitment</span>
+                  <span class="amount">-¥<span id="flowDebt">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item negative">
+                  <span class="label">Social Tax</span>
+                  <span class="amount">-¥<span id="flowSocial">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item negative">
+                  <span class="label">Daily Burn (30 days)</span>
+                  <span class="amount">-¥<span id="flowBurn">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item negative">
+                  <span class="label">Insurance Premium</span>
+                  <span class="amount">-¥<span id="flowInsurance">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item negative">
+                  <span class="label">Passion Fund (Sanity)</span>
+                  <span class="amount">-¥<span id="flowPassion">-</span></span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-item result">
+                  <span class="label">TRUE MONTHLY NET</span>
+                  <span class="amount" id="monthlyNetAmount">¥-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- YEAR-END PROJECTION -->
+            <div class="card">
+              <h3>📈 Module 8: Year-End Projection</h3>
+              <div class="projection">
+                <div class="metric">
+                  <span class="label">Current Cash</span>
+                  <span class="value">¥<span id="projCurrentCash">-</span></span>
+                </div>
+                <div class="metric">
+                  <span class="label">Monthly Net</span>
+                  <span class="value">¥<span id="projMonthlyNet">-</span></span>
+                </div>
+                <div class="metric">
+                  <span class="label">Months Remaining</span>
+                  <span class="value"><span id="projMonthsLeft">-</span></span>
+                </div>
+                <div class="metric-large">
+                  <span class="label">By Dec 31, 2026...</span>
+                  <span class="value-large" id="projectedYearEnd">¥-</span>
+                </div>
+              </div>
+              <p class="warning" id="projectionWarning">-</p>
+            </div>
+
+            <!-- PASSION BUDGET STATUS -->
+            <div class="card">
+              <h3>🎨 Module 5: Passion Fund Status</h3>
+              <div class="passion-status">
+                <div class="metric">
+                  <span class="label">Allocated Budget</span>
+                  <span class="value">¥<span id="passionBudget">-</span>/mo</span>
+                </div>
+                <div class="metric">
+                  <span class="label">% of Net Income</span>
+                  <span class="value"><span id="passionPercent">-</span>%</span>
+                </div>
+                <div class="metric">
+                  <span class="label">Status</span>
+                  <span class="value" id="passionStatus">-</span>
+                </div>
+              </div>
+              <p class="note" id="passionNote">-</p>
+            </div>
+
+            <!-- MOTIVATION -->
+            <div class="card card-positive">
+              <h3>💪 Your Motivation</h3>
+              <p id="motivationMessage" class="motivation-text">-</p>
+            </div>
+          </div>
+
+          <!-- TAB 2: DETAILED BREAKDOWN -->
+          <div id="modules" class="tab-content">
+            <div class="card">
+              <h3>📊 Complete Module Analysis</h3>
+              <pre id="moduleBreakdown"></pre>
+            </div>
+          </div>
+
+          <!-- TAB 3: IMPATIENCE CALCULATOR -->
+          <div id="impatience" class="tab-content">
+            <div class="card">
+              <h3>⏰ The Impatience Tax: Buy Now vs. Save Later</h3>
+              <p class="subtitle">See the brutal cost of impatience and credit card interest</p>
+
+              <div class="impatience-input">
+                <div class="input-group">
+                  <label for="dreamItemCost">Dream Item Cost (¥)</label>
+                  <input type="number" id="dreamItemCost" min="0" step="1000" value="50000" />
+                </div>
+                <div class="input-group">
+                  <label for="creditInterestRate">Credit Interest Rate (% per month)</label>
+                  <input type="number" id="creditInterestRate" min="0" max="50" step="0.5" value="1.33" />
+                  <span class="hint">Credit cards typically 16% annual = 1.33%/mo</span>
+                </div>
+              </div>
+
+              <div class="impatience-result">
+                <div class="result-item">
+                  <h4>💰 If You Save</h4>
+                  <div class="metric">
+                    <span class="label">Total Cost</span>
+                    <span class="value large">¥<span id="impatientCostSaved">-</span></span>
+                  </div>
+                  <div class="metric">
+                    <span class="label">Time to Wait</span>
+                    <span class="value large"><span id="impatientWaitTime">-</span> months</span>
+                  </div>
+                </div>
+
+                <div class="result-item">
+                  <h4>💳 If You Buy on Credit</h4>
+                  <div class="metric">
+                    <span class="label">Total Cost (with interest)</span>
+                    <span class="value large danger">¥<span id="impatientCostCredit">-</span></span>
+                  </div>
+                  <div class="metric">
+                    <span class="label">Monthly Payment</span>
+                    <span class="value">¥<span id="impatientMonthlyPayment">-</span></span>
+                  </div>
+                </div>
+
+                <div class="result-item highlight">
+                  <h4>⚠️ THE STUPIDITY TAX</h4>
+                  <div class="metric">
+                    <span class="label">Extra Cost of Impatience</span>
+                    <span class="value danger huge">¥<span id="impatientStupidityTax">-</span></span>
+                  </div>
+                  <div class="metric">
+                    <span class="label">% More Expensive</span>
+                    <span class="value danger"><span id="impatientStupidityPercent">-</span>%</span>
+                  </div>
+                  <p class="verdict" id="impatientVerdict">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: ACCIDENT SIMULATOR -->
+          <div id="accidents" class="tab-content">
+            <div class="card">
+              <h3>💥 Module 6: Accident & Insurance Simulator</h3>
+              <p class="subtitle">See how health penalties affect accident costs</p>
+
+              <div class="accident-simulator">
+                <div class="metric">
+                  <span class="label">Current Health Penalty</span>
+                  <span class="value large" id="accidentHealthPenalty">-</span>
+                </div>
+                <p class="note">This multiplier increases accident costs based on your poor sleep and diet.</p>
+
+                <h4>🚗 Simulate Accidents:</h4>
+                <div id="accidentButtons" class="accident-buttons"></div>
+
+                <div id="accidentResult" class="accident-result hidden">
+                  <h4 id="accidentName">-</h4>
+                  <div class="result-grid">
+                    <div class="result-item">
+                      <span class="label">Base Cost</span>
+                      <span class="value">¥<span id="accidentBaseCost">-</span></span>
+                    </div>
+                    <div class="result-item">
+                      <span class="label">After Health Penalty</span>
+                      <span class="value">¥<span id="accidentCostAfterHealth">-</span></span>
+                    </div>
+                    <div class="result-item">
+                      <span class="label">Insurance Covers</span>
+                      <span class="value">¥<span id="accidentInsuranceCover">-</span></span>
+                    </div>
+                    <div class="result-item danger">
+                      <span class="label">YOU PAY</span>
+                      <span class="value huge">¥<span id="accidentOutOfPocket">-</span></span>
+                    </div>
+                  </div>
+                  <p id="accidentSeverity" class="severity">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <p>
+          <strong>Remember:</strong> This simulator uses pure mathematics. No AI guessing. Every formula is deterministic and
+          based on real financial principles. Your actual life may vary based on luck, job changes, and unforeseen events.
+        </p>
+        <p>Built with ❤️ for salarymen and women seeking financial clarity.</p>
+      </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/state.js"></script>
+    <script src="js/modules.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/ui.js"></script>
+  </body>
+</html>
